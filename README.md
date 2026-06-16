@@ -14,7 +14,7 @@ A standalone Claude skill for performing comprehensive style guide reviews on do
 
 This is a standalone skill that can be used as a Claude Code skill. To use it:
 
-1. Clone or copy this repository to your Claude Code installation
+1. Clone or copy this repository to your Claude Code installation by running `git clone git@github.com:max-cx/docs-review.git` from the `~/.claude/skills/` directory
 2. Ensure the `sources/` directory contains your style guide markdown files
 3. The skill will automatically discover and process all `.md` files in `sources/`
 4. Invoke with `/docs-review` command
