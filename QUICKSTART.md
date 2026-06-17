@@ -4,18 +4,11 @@ Get up and running with AI Review in 5 minutes.
 
 ## Installation
 
-### Option 1: Clone the Repository (Recommended)
+### Clone the Repository
 
 ```bash
-git clone https://github.com/your-org/ai-review.git
-cd docs-review
-```
-
-### Option 2: Copy to Claude Code Skills
-
-Copy the entire `docs-review/` directory to your Claude Code skills folder:
-```bash
-~/.claude/skills/docs-review/
+cd ~/.claude/skills/
+git clone git@github.com:max-cx/docs-review.git
 ```
 
 ## First Review
