@@ -13,7 +13,7 @@ cd docs-review
 
 ### Option 2: Copy to Claude Code Skills
 
-Copy the entire `ai-review/` directory to your Claude Code skills folder:
+Copy the entire `docs-review/` directory to your Claude Code skills folder:
 ```bash
 ~/.claude/skills/docs-review/
 ```
