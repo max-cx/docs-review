@@ -8,14 +8,14 @@ Get up and running with AI Review in 5 minutes.
 
 ```bash
 git clone https://github.com/your-org/ai-review.git
-cd ai-review
+cd docs-review
 ```
 
 ### Option 2: Copy to Claude Code Skills
 
 Copy the entire `ai-review/` directory to your Claude Code skills folder:
 ```bash
-~/.claude/skills/ai-review/
+~/.claude/skills/docs-review/
 ```
 
 ## First Review
