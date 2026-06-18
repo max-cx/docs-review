@@ -1,6 +1,6 @@
 # AI Review Skill
 
-A standalone Claude skill for performing comprehensive style guide reviews on documentation content using parallel AI agents.
+A standalone Claude skill for using the Haiku model to perform comprehensive style guide reviews on documentation content using parallel AI agents.
 
 ## Features
 
