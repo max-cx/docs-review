@@ -1,6 +1,7 @@
 ---
 context: none
 name: docs-review
+model: haiku
 description: Parallel style guide review workflow using multiple Markdown source files. Reviews PRs, commits, or files against style guide rules. Use with arguments like PR URLs (#123), commit refs (HEAD~1), or file paths. Spawns parallel agents to analyze content against style guide line ranges for faster review.
 ---
 
