@@ -56,13 +56,6 @@ When asked, choose to:
 /docs-review HEAD~1
 ```
 
-### Review a GitHub PR
-
-```
-/docs-review #123
-/docs-review https://github.com/org/repo/pull/123
-```
-
 ### Review Multiple Files
 
 ```
