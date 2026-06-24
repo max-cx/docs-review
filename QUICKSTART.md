@@ -15,10 +15,10 @@ git clone git@github.com:max-cx/docs-review.git
 
 ### 1. Basic Usage
 
-Open Claude Code and run:
+Open Claude Code in a GitHub repository and run:
 
 ```
-/docs-review "TempoStack gateway pods spread across nodes for high availability"
+/docs-review last commit
 ```
 
 ### 2. Select Style Guides
