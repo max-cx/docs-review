@@ -43,7 +43,6 @@ Invoke the skill directly:
 /docs-review "Your text to review"
 /docs-review path/to/file.md
 /docs-review HEAD~1
-/docs-review #123
 ```
 
 ### Skill Parameters
