@@ -66,13 +66,11 @@ When asked, choose to:
 
 The skill includes these style guides (located in `sources/`):
 
-| Guide | Type | Coverage |
-|-------|------|----------|
-| **1-grammar_spelling_punctuation** | Grammar | Grammar and spelling rules |
-| **2-ibm-style-documentation** | Comprehensive | 26,880-line IBM Style Guide (grammar, punctuation, formatting, legal, word usage, references, etc.) |
-| **3-supplementary_style_guide** | Formatting | Document formatting conventions |
-| **4-vale_linter** | Linting | Vale linter rules for Red Hat style |
-| **5-foolproofing** | QA | Content foolproofing checks (copy-paste errors, duplicates) |
+* 1-grammar_spelling_punctuation
+* 2-ibm-style-documentation
+* 3-supplementary_style_guide
+* 4-vale_linter
+* 5-foolproofing
 
 ## Understanding the Report
 
