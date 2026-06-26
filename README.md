@@ -6,7 +6,7 @@ A standalone Claude skill for using the Haiku model to perform comprehensive sty
 
 - **Multi-style guide support**: Review content against multiple style guides simultaneously or sequentially
 - **Parallel processing**: Uses multiple agents to analyze large style guides efficiently (1000 lines per agent)
-- **Flexible input**: Review PRs, commits, files, or raw text
+- **Flexible input**: Reviews commits or files
 - **Comprehensive reporting**: Generates detailed reports with issue numbering, TOC paths, and suggested fixes
 - **Interactive resolution**: Review and apply fixes one by one
 
@@ -40,9 +40,8 @@ ai-review/
 
 Invoke the skill directly:
 ```
-/docs-review "Your text to review"
-/docs-review path/to/file.md
 /docs-review HEAD~1
+/docs-review path/to/file.md
 ```
 
 ### Skill Parameters
