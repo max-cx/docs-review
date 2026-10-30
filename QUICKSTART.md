@@ -7,18 +7,22 @@ Get up and running with AI Review in 5 minutes.
 ### Clone the Repository
 
 ```bash
-cd ~/.claude/skills/
+cd ~/.pi/agent/skills/
 git clone git@github.com:max-cx/docs-review.git
 ```
+
+For a project-level install, clone into `.pi/skills/` (or `.agents/skills/`) inside the project instead.
+
+Parallel analysis requires the Pi [subagent extension](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent/examples/extensions/subagent). Without it, the skill reviews line ranges sequentially.
 
 ## First Review
 
 ### 1. Basic Usage
 
-Open Claude Code in a GitHub repository and run:
+Open Pi in a GitHub repository and run:
 
 ```
-/docs-review last commit
+/skill:docs-review last commit
 ```
 
 ### 2. Select Style Guides
@@ -47,19 +51,19 @@ When asked, choose to:
 ### Review a File
 
 ```
-/docs-review path/to/your/document.md
+/skill:docs-review path/to/your/document.md
 ```
 
 ### Review a Git Commit
 
 ```
-/docs-review HEAD~1
+/skill:docs-review HEAD~1
 ```
 
 ### Review Multiple Files
 
 ```
-/docs-review docs/**/*.md
+/skill:docs-review docs/**/*.md
 ```
 
 ## Available Style Guides
@@ -95,17 +99,17 @@ A typical issue in the report looks like:
 ## Performance Tips
 
 ### For Large Documents
-Reviews are processed in parallel. A 26,880-line style guide is processed by 27 agents simultaneously (~45 seconds total).
+Reviews are processed in parallel. A 26,880-line style guide is split into 27 ranges and delegated to subagents in batches of at most 8 tasks (~45 seconds total with the subagent extension).
 
 ### For Multiple Reviews
 Store text in files to quickly review iterations:
 ```
-/docs-review report-draft-v1.md
+/skill:docs-review report-draft-v1.md
 ```
 
 Then make changes and review again:
 ```
-/docs-review report-draft-v2.md
+/skill:docs-review report-draft-v2.md
 ```
 
 ## Adding Custom Style Guides
@@ -114,13 +118,13 @@ Want to add your own style guide?
 
 1. Create `sources/6-my-guide.md`
 2. Add your style guide content (rules, headings, examples)
-3. Run `/docs-review` - it will automatically discover the new guide
+3. Run `/skill:docs-review` - it will automatically discover the new guide
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions.
 
 ## Report Files
 
-Review reports are saved to `reports/` with timestamps:
+Review reports are saved to the `reports/` directory inside the skill directory (for example `~/.pi/agent/skills/docs-review/reports/`) with timestamps:
 
 ```
 reports/review-2026-06-04-current.md
@@ -158,7 +162,7 @@ Ensure filename has numeric prefix:
 
 1. Save file in `sources/` directory
 2. Use numeric prefix (e.g., `6-`, `7-`)
-3. Run `/docs-review` again to rediscover
+3. Run `/skill:docs-review` again to rediscover
 
 ## Next Steps
 
@@ -184,11 +188,11 @@ cd ai-review
 # 2. Create a test document
 echo "The TempoStack pods spread across nodes for high availability" > test.txt
 
-# 3. Review it with Claude Code
-/docs-review test.txt
+# 3. Review it with Pi
+/skill:docs-review test.txt
 
 # 4. Check the generated report
-cat reports/review-*.md
+cat ~/.pi/agent/skills/docs-review/reports/review-*.md
 
 # 5. See the suggested fixes
 # Apply them as needed in your document

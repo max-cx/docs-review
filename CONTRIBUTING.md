@@ -38,7 +38,7 @@ Rule text here...
 **Best for**: Complete, self-contained style guides
 
 #### Type 2: URL Reference
-Include a single URL that points to downloadable style guide content. The skill will use WebFetch to retrieve the actual rules.
+Include a single URL that points to downloadable style guide content. The skill fetches the actual rules with `curl`.
 
 Example:
 ```markdown
@@ -92,7 +92,7 @@ Example: ✓ Good: "The pod runs on Node A, while other pods run on Node B."
 1. Place your file in `sources/`
 2. Run the skill with test content:
    ```
-   /docs-review "Test sentence about your style guide topic"
+   /skill:docs-review "Test sentence about your style guide topic"
    ```
 3. Check the generated report in `reports/`
 4. Verify that:
@@ -140,9 +140,8 @@ The skill's behavior is defined in `SKILL.md`. Key sections:
 - Temporary directory creation
 
 ### Phase 2: Processing
-- Agent spawning logic
-- Lines per agent calculation (default: 1000)
-- Model selection (default: haiku)
+- Range delegation logic (`subagent` tool when available, otherwise sequential analysis)
+- Lines per range calculation (default: 1000)
 
 ### Phase 3: Results Merging
 - Issue deduplication
@@ -191,7 +190,7 @@ ls -la sources/
 file sources/your-guide.md
 
 # Test with sample content
-/docs-review "Sample text about your style guide"
+/skill:docs-review "Sample text about your style guide"
 
 # Review generated report
 cat reports/review-*.md

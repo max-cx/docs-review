@@ -2,6 +2,25 @@
 
 All notable changes to the AI Review skill are documented in this file.
 
+## [2.0.0] - 2025-06-09
+
+### Changed
+
+- **Migrated from Claude Code to Pi**: The skill now runs as a Pi skill instead of a Claude skill
+- **Frontmatter**: `SKILL.md` uses only the portable Agent Skills fields (`name`, `description`); the Claude-specific `context` field was dropped
+- **Model preference removed**: The skill no longer requests a specific model. Reviews use the active Pi session model, and subagents inherit the dispatching session's model unless their agent definition sets one
+- **Invocation**: Run the skill with `/skill:docs-review` instead of `/docs-review`
+- **Installation**: Clone into `~/.pi/agent/skills/` (user) or `.pi/skills/`/`.agents/skills/` (project)
+- **Parallel analysis**: Line ranges are delegated with the Pi `subagent` tool (parallel `tasks` mode) when the subagent extension is installed; otherwise ranges are analyzed sequentially in the current session
+- **User prompts**: Questions are asked directly in chat as numbered lists instead of with the Claude `AskUserQuestion` tool
+- **Tool names**: References updated to Pi tools (`read`, `bash`, `edit`, `write`), and `WebFetch` replaced with `curl` for URL-based sources
+- **Skill directory**: `${CLAUDE_SKILL_DIR}` replaced with the absolute path Pi reports for the directory containing `SKILL.md`
+
+### Removed
+
+- Preferred model setting (`model: haiku`) and all model-selection instructions
+- `.claude-plugin/` plugin configuration references
+
 ## [1.0.0] - 2026-06-08
 
 ### Added
@@ -57,8 +76,6 @@ All notable changes to the AI Review skill are documented in this file.
 
 ```
 ai-review/
-├── .claude-plugin/
-│   └── plugin.json              # Plugin configuration
 ├── .gitignore                   # Git ignore rules
 ├── CHANGELOG.md                 # This file
 ├── CONTRIBUTING.md              # Contribution guidelines
@@ -78,28 +95,28 @@ ai-review/
 
 ### Configuration
 
-- **Agent model**: `haiku` (configurable in SKILL.md)
-- **Lines per agent**: 1000 (configurable in Phase 2)
+- **Agent model**: inherited from the active Pi session (no model is pinned by the skill)
+- **Lines per range**: 1000 (configurable in Phase 2)
 - **Processing order**: Alphanumerical (based on numeric prefixes in filenames)
 - **Report location**: `reports/review-YYYY-MM-DD-timestamp.md`
 
 ### Performance
 
-- **IBM Style Guide (26,880 lines)**: ~45 seconds with 27 parallel agents
-- **Total agents per run**: Equal to ceiling(total_lines / 1000) across all selected guides
+- **IBM Style Guide (26,880 lines)**: ~45 seconds with 27 ranges, split into batches of at most 8 subagent tasks
+- **Total ranges per run**: Equal to ceiling(total_lines / 1000) across all selected guides
 - **Report generation**: Includes deduplication and sequential numbering
 
 ### Dependencies
 
-- Claude Code with Agent support
+- Pi (with the optional subagent extension for parallel analysis)
 - Optional: Git (for commit-based reviews)
 - Optional: GitHub CLI `gh` (for PR-based reviews)
 
 ### Known Limitations
 
 - Temporary files require manual cleanup if interrupted (see SKILL.md Phase 3)
-- Agent prompts assume style guide files contain rule definitions
-- URL reference guides require WebFetch (external network access)
+- Range prompts assume style guide files contain rule definitions
+- URL reference guides require network access (fetched with `curl`)
 - Tool instruction guides require external linting tools to be installed
 
 ### Future Enhancements
