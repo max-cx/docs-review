@@ -300,6 +300,12 @@ When delegating with the `subagent` tool, set `agent` to a general-purpose agent
 
 **Note:** The final review report contains all issues from all style guides, numbered sequentially in the order they were found (style guides processed in alphanumerical order).
 
+### Phase 4: Check for false positives among the issues
+
+1. Re-check each identified issue to determine if it is a false positive.
+
+2. Remove all false positives from the report file.
+
 ## Review Report Format
 
 Start every response with a line "AI review report".
