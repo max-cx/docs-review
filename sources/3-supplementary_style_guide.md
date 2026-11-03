@@ -55,6 +55,26 @@ Review the history of significant updates to the _Red Hat supplementary style gu
 To view the history of changes from 2020 through 2022, see the [What’s new](https://github.com/redhat-documentation/supplementary-style-guide/blob/main/HISTORY.md) page in the GitHub repository.
 
 
+#### 2026
+
+##### January-June 2026
+
+With this update, the SSG is automatically generated in [Markdown](#markdown-version) format in addition to being available as a PDF and in HTML. This change optimizes the SSG for AI consumption and machine reading.
+
+* **[OS](#os-noun)**: Added glossary entry
+* **[hosted control planes](#hosted-control-planes-noun)**: Added glossary entry
+* **[inference](#inference-noun-verb)**: Added glossary entry
+* **[inferencing](#inferencing-noun)**: Added glossary entry
+* **[inference serving](#inference-serving-verb)**: Added glossary entry
+* **[InferenceService](#inferenceservice-noun)**: Added glossary entry
+
+* **[Titles and headings](#titles-and-headings)**: Added additional guidance for writing titles and headings for different content types. The guidance includes recommendations for title length and words to avoid. Procedure titles and headings should begin with imperatives instead of gerunds. But do not change any gerund-based headings and titles until after you have converted the content into a Jobs to Be Done format.
+* **[Commands in code blocks](#commands-in-code-blocks)**: Removed the requirement to enclose commands in asterisks for bold formatting, which was breaking commands that contain wildcard characters (`*`).
+* **[Explanation of commands and variables](#explanation-of-commands-and-variables-used-in-code-blocks)**: Clarified callout options to provide more flexibility. Description list entries can start with a full sentence, noun phrase, or third-person verb (for example, "Specifies").
+* **[Links to Red Hat documentation](#links-to-red-hat-documentation)**: Added guidance to use `latest` in links to Red Hat documentation to simplify maintenance. Added guidance for projects that must link to specific versions.
+* **[Release notes](#release-notes)**: Updated examples to align with the rule to avoid "now" for the post-update state.
+* **[Short descriptions](#short-descriptions)**: Updated guidance for writing short descriptions that adhere to DITA standards. This guidance includes new diagram examples that show how procedures are structured in both AsciiDoc and DITA and more examples of short descriptions for different content types.
+
 #### 2025
 ##### June-December 2025
 
@@ -904,7 +924,7 @@ For example, you might combine existing product name attributes to create compou
 
 #### Single-step procedures
 
-When a procedure contains only one step, use an unnumbered bullet.
+When a procedure contains only one step, use an unnumbered bullet to make the step more visible.
 
 For example:
 * Install the `dnf-automatic` package.
@@ -1084,6 +1104,8 @@ Admonitions should be short and concise. Do not include procedures in an admonit
 
 Only individual admonitions are allowed, for example, you cannot have a plural **NOTES** heading.
 
+Do not start a module or assembly with an admonition, even when adding the Technology Preview admonition. Always include a short description before including an admonition.
+
 **Example AsciiDoc**
 
 ```
@@ -1162,7 +1184,7 @@ Short descriptions help readers find the information that they need and confirm 
 
 * Include user intent. Explain **what** the user must do and **why** they must complete that action. Build upon the title--do not repeat it.
 * Write for AI and search. High-quality short descriptions are a primary source of metadata for large language models (LLMs) and search engine link previews. A high quality, human-verified summary reduces the risk of AI misinterpretation and saves processing time.
-* Do not use DITA-incompatible structures, such as bulleted lists or multiple paragraphs.
+* Do not use DITA-incompatible structures, such as bulleted lists, multiple paragraphs, or inline links.
 
 ##### Style guidelines ===
 
@@ -1391,6 +1413,15 @@ In these situations, follow these guidelines:
 
 ### Links
 
+#### Where links are allowed
+
+To preserve reader focus and improve content usability, inline links are restricted in some places:
+
+* Concept topics: Avoid inline links. Place essential links in the "Related Links" section at the end of the topic.
+* Procedure topics: Inline links are allowed to support task completion.
+* Reference topics: Inline links are allowed but consider moving supplemental links to the "Related Links" section when possible.
+* Short descriptions: Do not include links.
+
 #### Cross-references
 
 Follow these guidelines when adding cross-references within your documentation:
@@ -1408,9 +1439,8 @@ For more information about <topic>, see xref:<link>[<link_text>].
 
 Follow these guidelines when linking externally:
 
-* Avoid unnecessary links to external sites not owned and operated by Red Hat or IBM.
-Links to external sites can change or be unreliable.
-In addition, customers might infer that Red Hat endorses or supports the linked content, even if that is not the intent.
+* Minimize links to external sites not owned and operated by Red Hat or IBM. Links to external sites can change or be unreliable. Customers might infer that Red Hat endorses or supports the linked content, even if that is not the intent.
+* Use external links only when necessary for product deployment, configuration, or integration. For example, you can link to official documentation for supported partner platforms, such as AWS, Azure, and Google Cloud Platform.
 
   > **NOTE:**
 
@@ -1461,7 +1491,7 @@ For more information, see link:https://docs.redhat.com/en/documentation/openshif
 
 For a non-cloud environment, you can resize the disk and file system. For more information, see the Red Hat Knowledgebase solution [Does RHEL 7 support online resize of disk partitions?](https://access.redhat.com/solutions/199573).
 
-If your Apache web server configuration enables SSL security, verify that you enable only the TLSv1 protocol and disable SSLv2 and SSLv3. This is because of the [POODLE SSL vulnerability (CVE-2014-3566)](https://access.redhat.com/solutions/1232413).
+If your Apache web server configuration enables SSL security, enable only the TLSv1 protocol. Disable SSLv2 and SSLv3 because they are vulnerable to the [POODLE SSL vulnerability (CVE-2014-3566)](https://access.redhat.com/solutions/1232413).
 
 * [Does RHEL 7 support online resize of disk partitions? (Red Hat Knowledgebase)](https://access.redhat.com/solutions/199573)
 
@@ -4488,6 +4518,13 @@ If referring to the program, use "Emacs", for example, "Source-Navigator support
 
 
 
+##### email (noun)
+**Description**: Use _email_ to refer to the communication system or service. To improve translation accuracy, distinguish between _email address_ (a specific address such as user@example.com) and _email message_ (a communication sent by using email).
+
+**Use it**: with caution
+
+
+
 ##### emit (verb)
 **Description**: _Emit_ means to send something out. Do not use "send out" because that is too informal and imprecise. Alternatively, use "issue".
 
@@ -6795,7 +6832,7 @@ Always capitalize as shown, with the exception of UI content.
 **See also**: [Metadata Server](#metadata-server-noun), [ceph-mds](#ceph-mds-noun)
 
 ##### media (noun)
-**Description**: (1) _Media_ are objects on which data can be stored. These objects include hard disks, diskettes, CDs, and tapes. (2) In computer networks, "media" refer to the cables linking workstations together. There are many different types of transmission media, the most popular being twisted-pair wire (normal electrical wire), coaxial cable (the type of cable used for cable television), and fiber optic cable (cables made out of glass). (3) "Media" can also mean the form and technology used to communicate information. Multimedia presentations, for example, combine sound, pictures, and videos, all of which are different types of media.
+**Description**: (1) _Media_ are objects on which data can be stored. These objects include hard disks, floppy disks, CDs, and tapes. (2) In computer networks, "media" refer to the cables linking workstations together. There are many different types of transmission media, the most popular being twisted-pair wire (normal electrical wire), coaxial cable (the type of cable used for cable television), and fiber optic cable (cables made out of glass). (3) "Media" can also mean the form and technology used to communicate information. Multimedia presentations, for example, combine sound, pictures, and videos, all of which are different types of media.
 
 **Use it**: yes
 
@@ -10525,11 +10562,12 @@ A web server uses its public key to obtain a certificate from a trusted CA. The 
 
 
 
-##### user name (noun)
-**Description**: Use as shown, two words, except for instances in which the GUI uses the single word form ("username").
+##### username (noun)
+**Description**: Use _username_ as one word. This spelling aligns with current IBM Style recommendations and PatternFly guidelines, which are already used in Red Hat consoles.
 
 **Use it**: yes
 
+**Incorrect forms**: user name
 
 
 ##### user role mapping (noun)
