@@ -1,203 +1,147 @@
-# Quick Start Guide
+# Quick Start
 
-Get up and running with AI Review in 5 minutes.
+Get from clone to a first review report in a few minutes.
 
-## Installation
+## 1. Install
 
-### Clone the Repository
+User-level (available in every project):
 
 ```bash
-cd ~/.pi/agent/skills/
+cd ~/.pi/agent/skills
 git clone git@github.com:max-cx/docs-review.git
 ```
 
-For a project-level install, clone into `.pi/skills/` (or `.agents/skills/`) inside the project instead.
+Project-level (available in one repository only):
 
-Parallel analysis requires the Pi [subagent extension](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent/examples/extensions/subagent). Without it, the skill reviews line ranges sequentially.
-
-## First Review
-
-### 1. Basic Usage
-
-Open Pi in a GitHub repository and run:
-
-```
-/skill:docs-review last commit
+```bash
+mkdir -p .pi/skills
+git clone git@github.com:max-cx/docs-review.git .pi/skills/docs-review
 ```
 
-### 2. Select Style Guides
+`~/.agents/skills/` and `.agents/skills/` also work. Project-level skills load only after the project is trusted.
 
-When prompted, choose one of:
-- **Review against all style guides** - Checks against all available guides
-- **Review against one style guide** - Pick a specific guide
+Parallel analysis needs the Pi [subagent extension](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent/examples/extensions/subagent). Without it, the skill analyzes line ranges one at a time and takes much longer on the big guides.
 
-### 3. Review Results
+## 2. Run a review
 
-The skill generates a report in `reports/` with:
-- Each issue numbered
-- Current text and suggested fixes
-- Style rule being violated
-- TOC path to the rule in the style guide
+The argument after the command is what gets reviewed:
 
-### 4. Apply Fixes (Optional)
-
-When asked, choose to:
-- **Apply** - Accept the suggestion
-- **Skip** - Keep the original text
-- **Modify** - Provide a custom fix
-
-## Common Tasks
-
-### Review a File
-
-```
-/skill:docs-review path/to/your/document.md
-```
-
-### Review a Git Commit
-
-```
+```text
+/skill:docs-review https://github.com/openshift/openshift-docs/pull/123698
+/skill:docs-review 123698
 /skill:docs-review HEAD~1
+/skill:docs-review HEAD~3..HEAD
+/skill:docs-review modules/otel-collector-config-options.adoc
+/skill:docs-review modules/*.adoc
 ```
 
-### Review Multiple Files
+With no argument, the skill reviews the latest commit (`HEAD`).
 
+## 3. Pick the style guides
+
+The skill lists everything in `sources/` and asks:
+
+1. **Review against all style guides** — process every guide in alphanumerical order, asking before each one
+2. **Review against one style guide** — then pick one from a generated list
+
+The guides it can offer:
+
+| File | What it checks | Lines |
+|---|---|---|
+| `1-grammar_spelling_punctuation.md` | American English grammar, spelling, punctuation | 3 |
+| `2-ibm-style-documentation.md` | IBM Style | 25,238 |
+| `3-supplementary_style_guide.md` | Red Hat supplementary guide (overrides IBM Style) | 11,102 |
+| `4-vale_linter.md` | Runs Vale — **requires `vale` installed**, otherwise this guide aborts and asks you to install it | 11 |
+| `5-foolproofing.md` | Copy-paste errors, incomplete changes, duplicates | 1 |
+| `6-ocp-merge-review.md` | OpenShift docs PR merge checklist via the GitHub REST API | 166 |
+
+`6-ocp-merge-review.md` checks PR metadata rather than prose: title/description format, single commit, versions + Jira + preview link, QE checkbox, peer approval, resolved conversations, WIP label, CI status. It needs `curl` and `python3`; a `GITHUB_TOKEN`/`GH_TOKEN` improves the checks that unauthenticated calls cannot verify.
+
+## 4. Read the report
+
+Each run creates one file in `<skill-dir>/reports/`, named with a timestamp:
+
+```text
+reports/review-2026-11-02-18:34:21.md
 ```
-/skill:docs-review docs/**/*.md
-```
 
-## Available Style Guides
-
-The skill includes these style guides (located in `sources/`):
-
-* 1-grammar_spelling_punctuation
-* 2-ibm-style-documentation
-* 3-supplementary_style_guide
-* 4-vale_linter
-* 5-foolproofing
-
-## Understanding the Report
-
-A typical issue in the report looks like:
+The report starts with `AI review report`, then the user request, commit hash, and subject, then numbered issues:
 
 ```markdown
-*   **Issue 3**
-    *   **Current sentence:** `As a result, all gateway replicas could be scheduled on the same node.`
-    *   **Suggested change:** `As a result, the system could schedule all gateway replicas on the same node.`
-    *   **Style rule:** Write in active voice and the present tense as much as possible.
-    *   **TOC path:** *IBM Style* > *Grammar* > *Grammar*
+*   **Issue 1**
+    *   **File:** `modules/otel-processors-log-dedup-processor.adoc`
+    *   **Current sentence:** `The processor deduplicates log records that have the same timestamp and body.`
+    *   **Suggested change:** `The processor deduplicates log records that share a timestamp and body.`
+    *   **Style rule:** <first sentence of the rule>
+    *   **TOC path:** *IBM Style* > *Word usage* > *...*
 ```
 
-### Reading the Fields
+- **Issue N** — sequential across all guides in the run
+- **File** — the file the sentence came from
+- **Current / Suggested** — the flagged sentence and a corrected version
+- **Style rule** — first sentence of the violated rule
+- **TOC path** — where that rule lives in the style guide
 
-- **Issue N** - Sequential number across all style guides
-- **Current sentence** - The exact text being flagged
-- **Suggested change** - How the text should be corrected
-- **Style rule** - First sentence of the rule from the style guide
-- **TOC path** - Where to find the full rule in the style guide
+If one sentence breaks several rules, the issues for it are grouped and marked `⚠ WARNING! Sentence with multiple issues!`. After the review, the skill re-checks every issue and removes false positives, so numbers can have gaps.
 
-## Performance Tips
+The report ends with `End of report`. Reports are never overwritten by a later run, but two runs started in the same second would collide.
 
-### For Large Documents
-Reviews are processed in parallel. A 26,880-line style guide is split into 27 ranges and delegated to subagents in batches of at most 8 tasks (~45 seconds total with the subagent extension).
+## 5. Apply fixes (optional)
 
-### For Multiple Reviews
-Store text in files to quickly review iterations:
-```
-/skill:docs-review report-draft-v1.md
-```
+If any issues were found, the skill offers:
 
-Then make changes and review again:
-```
-/skill:docs-review report-draft-v2.md
-```
+- **Yes** — go through issues one by one
+- **No** — keep the report as-is
 
-## Adding Custom Style Guides
+For each issue you then choose **Apply**, **Skip**, or **Modify** (your own wording).
 
-Want to add your own style guide?
+## Common tasks
 
-1. Create `sources/6-my-guide.md`
-2. Add your style guide content (rules, headings, examples)
-3. Run `/skill:docs-review` - it will automatically discover the new guide
+### Review someone's PR
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions.
-
-## Report Files
-
-Review reports are saved to the `reports/` directory inside the skill directory (for example `~/.pi/agent/skills/docs-review/reports/`) with timestamps:
-
-```
-reports/review-2026-06-04-current.md
-reports/review-2026-06-05-14-30-00.md
+```text
+/skill:docs-review https://github.com/openshift/openshift-docs/pull/123698
 ```
 
-Each report contains:
-- Complete issue list
-- Issues organized by style guide
-- All suggested fixes
-- Summary statistics
+PR diffs are fetched from the public `.diff` URL with `curl`, so `gh` is not needed. For proper results on PRs with several commits or a base branch other than `main`, check the PR's `base.sha` — see "Known limitations" in the [README](README.md).
+
+### Review one file, then again after editing
+
+```text
+/skill:docs-review modules/my-module.adoc
+# edit the file
+/skill:docs-review modules/my-module.adoc
+```
+
+### Review only the merge checklist
+
+Choose **Review against one style guide** → `6-ocp-merge-review`.
 
 ## Troubleshooting
 
-### "No style guides found"
-
-Check that `sources/` directory contains `.md` files:
-```bash
-ls -la sources/
-```
-
-### Style guide not being processed
-
-Ensure filename has numeric prefix:
-- ✓ `1-my-guide.md` (will process)
-- ✗ `my-guide.md` (may not process)
-
-### Issues not appearing in report
-
-1. Verify the style guide contains rules
-2. Check that the text actually violates a rule
-3. Review the agent output for error messages
-
-### Custom style guide not discovered
-
-1. Save file in `sources/` directory
-2. Use numeric prefix (e.g., `6-`, `7-`)
-3. Run `/skill:docs-review` again to rediscover
-
-## Next Steps
-
-- Read [README.md](README.md) for full feature overview
-- See [CONTRIBUTING.md](CONTRIBUTING.md) to add custom style guides
-- Check [SKILL.md](SKILL.md) for advanced configuration
-- Review generated reports in `reports/` directory
-
-## Getting Help
-
-- Check example reports in `reports/` directory
-- Review README.md for detailed feature documentation
-- Read SKILL.md for configuration details
-- See CONTRIBUTING.md for extending functionality
-
-## Example Workflow
+**"No style guides found"** — `sources/` has no `.md` files. The skill prints the path it checked:
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/your-org/ai-review.git
-cd ai-review
-
-# 2. Create a test document
-echo "The TempoStack pods spread across nodes for high availability" > test.txt
-
-# 3. Review it with Pi
-/skill:docs-review test.txt
-
-# 4. Check the generated report
-cat ~/.pi/agent/skills/docs-review/reports/review-*.md
-
-# 5. See the suggested fixes
-# Apply them as needed in your document
+ls -la ~/.pi/agent/skills/docs-review/sources/
 ```
 
----
+**A guide was skipped** — `4-vale_linter.md` aborts when `vale` is not on `PATH`. Install Vale or skip that guide; the other guides still run.
 
-**That's it!** You're now ready to review documentation with AI Review.
+**Review is slow** — the IBM guide alone is 26 ranges of 1000 lines. Install the subagent extension, or review against one guide instead of all of them.
+
+**Something looks unverified in a merge review** — unauthenticated GitHub REST calls are capped at 60 per hour per IP, and review-thread resolution needs a token. The merge-review guide reports those items as ⚠️ rather than guessing.
+
+**Leftover `temp/` files** — an interrupted run does not clean up. Remove them with:
+
+```bash
+rm -rf ~/.pi/agent/skills/docs-review/temp
+# or
+~/.pi/agent/skills/docs-review/scripts/cleanup-temp.sh
+```
+
+## Next steps
+
+- [README.md](README.md) — full reference: scripts, phases, report format, limitations
+- [SKILL.md](SKILL.md) — the workflow the model follows, including prompts
+- [CONTRIBUTING.md](CONTRIBUTING.md) — adding or editing style guides
+- `reports/` — past reports are useful examples of the output format
