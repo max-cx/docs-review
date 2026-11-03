@@ -9,7 +9,7 @@ Thank you for interest in improving the AI Review skill! This document explains 
 Create a new markdown file in the `sources/` directory with a numeric prefix:
 
 ```bash
-sources/6-your-style-guide.md
+sources/7-your-style-guide.md
 ```
 
 The numeric prefix controls processing order (1, 2, 3... are processed first).
