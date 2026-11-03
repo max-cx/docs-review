@@ -19,7 +19,7 @@ Subagents inherit the dispatching session's model; the skill never pins a model.
 
 | Dependency | Needed for |
 |---|---|
-| [Pi](https://github.com/badlogic/pi-mono) | Running the skill |
+| [Pi](https://github.com/earendil-works/pi) | Running the skill |
 | `bash`, `git` | Diffing the content under review, scripts |
 | `curl` | PR diffs, URL-based sources, GitHub REST API calls |
 | `python3` | JSON digest in the `6-ocp-merge-review.md` workflow |
