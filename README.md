@@ -23,7 +23,7 @@ Subagents inherit the dispatching session's model; the skill never pins a model.
 | `bash`, `git` | Diffing the content under review, scripts |
 | `curl` | PR diffs, URL-based sources, GitHub REST API calls |
 | `python3` | JSON digest in the `6-ocp-merge-review.md` workflow |
-| [subagent extension](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent/examples/extensions/subagent) | Parallel range analysis (optional — falls back to sequential) |
+| [subagent extension](https://github.com/earendil-works/pi/tree/main/packages/coding-agent/examples/extensions/subagent) | Parallel range analysis (optional — falls back to sequential) |
 | `vale` | Only for `sources/4-vale_linter.md`. The skill aborts that guide and asks you to install Vale if the command is missing |
 | `gh` | Not required. `6-ocp-merge-review.md` explicitly warns that the CLI is usually absent and uses the GitHub REST API with `curl` instead |
 
